@@ -1298,3 +1298,58 @@ h6 {
     margin-bottom: 30px;
   }
 }
+
+/* Add this to your existing styles.css file */
+
+.mute-btn {
+  position: left;
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: var(--text-color);
+  margin-left: 15px;
+  transition: transform 0.3s, color 0.3s;
+  z-index: 1001;
+}
+
+.mute-btn:hover {
+  transform: scale(1.1);
+  color: var(--primary-color);
+}
+
+.mute-btn:active {
+  transform: scale(0.95);
+}
+
+/* Add a subtle glow effect to the mute button */
+.mute-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(112, 0, 255, 0.2) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mute-btn:hover::after {
+  opacity: 1;
+}
+
+/* Responsive adjustments for the mute button */
+@media (max-width: 768px) {
+  .mute-btn {
+    position: absolute;
+    top: 20px;
+    right: 70px;
+    font-size: 20px;
+    
+  }
+}
+

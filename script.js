@@ -1,5 +1,74 @@
 // Initialize Locomotive Scroll for smooth scrolling
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function() {
+  // Get the audio element and mute button
+  const bgMusic = document.getElementById("bgMusic");
+  const muteBtn = document.getElementById("muteBtn");
+  const muteIcon = muteBtn.querySelector("i");
+  
+  // Function to play audio (needed because of autoplay restrictions)
+  function playAudio() {
+    // Set initial volume to be lower
+    bgMusic.volume = 0.3;
+    
+    // Try to play the audio
+    const playPromise = bgMusic.play();
+    
+    // Handle the play promise
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        // Autoplay started successfully
+        console.log("Audio started playing automatically");
+        // Update button to show the correct state
+        muteIcon.classList.remove("fa-volume-up");
+      })
+      .catch(error => {
+        // Autoplay was prevented
+        console.log("Autoplay prevented:", error);
+        // Update button to show the correct state
+        muteIcon.classList.add("fa-volume-mute");
+        // Set muted state
+        bgMusic.muted = true;
+      });
+    }
+  }
+  
+  // Try to play audio when the page loads
+  playAudio();
+  
+  // Add click event listener to the mute button
+  muteBtn.addEventListener("click", function() {
+    // Toggle muted state
+    bgMusic.muted = !bgMusic.muted;
+    
+    // Update button text based on muted state
+    if (bgMusic.muted) {
+      muteIcon.classList.remove("fa-volume-up");
+      muteIcon.classList.add("fa-volume-mute");
+    } else {
+      muteIcon.classList.remove("fa-volume-mute");
+      muteIcon.classList.add("fa-volume-up");
+      // If it was muted and now unmuted, try to play
+      if (bgMusic.paused) {
+        bgMusic.play();
+      }
+    }
+  });
+  
+  // Add user interaction event listeners to start audio
+  // This helps with browsers that block autoplay until user interaction
+  document.addEventListener("click", function() {
+    if (bgMusic.paused && !bgMusic.muted) {
+      playAudio();
+    }
+  });
+  
+  document.addEventListener("keydown", function() {
+    if (bgMusic.paused && !bgMusic.muted) {
+      playAudio();
+    }
+  });
+
+
   // Import necessary libraries (GSAP, Locomotive Scroll, ScrollTrigger)
   gsap.registerPlugin(ScrollTrigger)
 
@@ -605,6 +674,9 @@ function directCounterAnimation() {
     requestAnimationFrame(updateCounter)
   })
 }
+
+
+
 
 // Call the direct animation function after a delay
 setTimeout(directCounterAnimation, 1000)
