@@ -113,47 +113,115 @@ document.addEventListener("DOMContentLoaded", () => {
     delay: 0.6,
   })
 
-  // Animate skill progress bars when in view
-  const skillProgressBars = document.querySelectorAll(".skill-progress")
+  // DIRECT SKILL BAR ANIMATION - No GSAP or ScrollTrigger
+  function animateSkillBarsDirectly() {
+    // Add CSS for skill bars
+    const skillStyle = document.createElement("style")
+    skillStyle.textContent = `
+      .skill-bar {
+        background-color: rgba(255, 255, 255, 0.1);
+        height: 8px;
+        border-radius: 4px;
+        margin-top: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+      .skill-progress {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        border-radius: 4px;
+        position: relative;
+        width: 0%; /* Start at 0 */
+        transition: width 1.5s ease-out;
+        box-shadow: 0 0 10px rgba(112, 0, 255, 0.5);
+      }
+    `
+    document.head.appendChild(skillStyle)
 
-  function animateSkillBars() {
+    // Get all skill progress bars
+    const skillProgressBars = document.querySelectorAll(".skill-progress")
+
+    // Set initial width to 0
+    skillProgressBars.forEach((bar) => {
+      bar.style.width = "0%"
+    })
+
+    // Force browser reflow
+    void document.body.offsetHeight
+
+    // Animate to final width
     skillProgressBars.forEach((bar) => {
       const progress = bar.getAttribute("data-progress")
-      gsap.to(bar, {
-        width: `${progress}%`,
-        duration: 1.5,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: bar,
-          scroller: "[data-scroll-container]",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      })
+      setTimeout(() => {
+        bar.style.width = `${progress}%`
+      }, 300) // Small delay to ensure animation works
     })
+  }
+
+  // Call the direct animation function immediately
+  animateSkillBarsDirectly()
+
+  // Also call it when the skills section comes into view
+  const skillsSection = document.getElementById("skills")
+  if (skillsSection) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateSkillBarsDirectly()
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1 },
+    )
+
+    observer.observe(skillsSection)
   }
 
   // Animate stat counters
   const statNumbers = document.querySelectorAll(".stat-number")
 
+  // Find the animateCounters function and replace it with this improved version
   function animateCounters() {
+    const statNumbers = document.querySelectorAll(".stat-number")
+
     statNumbers.forEach((stat) => {
       const target = Number.parseInt(stat.getAttribute("data-count"))
-      gsap.to(stat, {
-        innerText: target,
-        duration: 2,
-        ease: "power2.out",
-        snap: { innerText: 1 },
-        scrollTrigger: {
-          trigger: stat,
-          scroller: "[data-scroll-container]",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
+
+      // Direct animation without ScrollTrigger dependency
+      let current = 0
+      const duration = 2000 // 2 seconds
+      const increment = target / (duration / 16) // 60fps
+
+      // Set initial value
+      stat.textContent = "0"
+
+      // Create animation
+      const updateCounter = () => {
+        current += increment
+        if (current < target) {
+          stat.textContent = Math.ceil(current)
+          requestAnimationFrame(updateCounter)
+        } else {
+          stat.textContent = target
+        }
+      }
+
+      // Use Intersection Observer to start animation when element is visible
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              requestAnimationFrame(updateCounter)
+              observer.unobserve(entry.target)
+            }
+          })
         },
-        onUpdate: function () {
-          stat.innerText = Math.ceil(this.targets()[0].innerText)
-        },
-      })
+        { threshold: 0.1 },
+      )
+
+      observer.observe(stat)
     })
   }
 
@@ -178,7 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
   ScrollTrigger.refresh()
 
   // Run animations
-  animateSkillBars()
   animateCounters()
 
   // Mobile menu toggle
@@ -423,4 +490,124 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     `
   document.head.appendChild(baseStyle)
+
+  // ADDITIONAL FALLBACK: Direct DOM manipulation for skill bars
+  // This is a last resort if all other methods fail
+  setTimeout(() => {
+    const skillBars = document.querySelectorAll(".skill-progress")
+    const anyAnimated = Array.from(skillBars).some((bar) => Number.parseFloat(getComputedStyle(bar).width) > 10)
+
+    if (!anyAnimated) {
+      console.log("Using direct DOM manipulation for skill bars")
+      skillBars.forEach((bar) => {
+        const progress = bar.getAttribute("data-progress")
+        bar.style.cssText = `
+          width: ${progress}% !important; 
+          height: 100% !important;
+          background: linear-gradient(90deg, #7000ff, #00e5ff) !important;
+          border-radius: 4px !important;
+          position: relative !important;
+          box-shadow: 0 0 10px rgba(112, 0, 255, 0.5) !important;
+          transition: none !important;
+        `
+      })
+    }
+  }, 2500)
+
+  // Create a standalone function to animate skill bars without dependencies
+  function forceAnimateSkillBars() {
+    const skillBars = document.querySelectorAll(".skill-progress")
+    skillBars.forEach((bar) => {
+      const progress = bar.getAttribute("data-progress")
+      bar.style.width = `${progress}%`
+    })
+  }
+
+  // Call it on window load as well
+  window.addEventListener("load", forceAnimateSkillBars)
+
+  // And call it after a delay
+  setTimeout(forceAnimateSkillBars, 1000)
+  setTimeout(forceAnimateSkillBars, 2000)
 })
+
+// Add a standalone function outside the DOMContentLoaded event
+// This ensures it runs even if there are issues with the event
+window.onload = () => {
+  setTimeout(() => {
+    const skillBars = document.querySelectorAll(".skill-progress")
+    skillBars.forEach((bar) => {
+      const progress = bar.getAttribute("data-progress")
+      bar.style.width = `${progress}%`
+    })
+    console.log("Window onload skill bar animation applied")
+  }, 500)
+}
+
+// Add a direct script to run immediately
+document.addEventListener("DOMContentLoaded", () => {
+  // Create and inject CSS for skill bars
+  const style = document.createElement("style")
+  style.innerHTML = `
+    .skill-bar {
+      background-color: rgba(255, 255, 255, 0.1);
+      height: 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .skill-progress {
+      height: 100%;
+      background: linear-gradient(90deg, #7000ff, #00e5ff);
+      border-radius: 4px;
+      position: relative;
+      transition: width 1.5s ease-out;
+      box-shadow: 0 0 10px rgba(112, 0, 255, 0.5);
+    }
+  `
+  document.head.appendChild(style)
+
+  // Direct animation without dependencies
+  setTimeout(() => {
+    const bars = document.querySelectorAll(".skill-progress")
+    bars.forEach((bar) => {
+      const progress = bar.getAttribute("data-progress")
+      bar.style.width = `${progress}%`
+    })
+  }, 100)
+})
+
+// Add a standalone counter animation function that doesn't depend on other libraries
+function directCounterAnimation() {
+  const statNumbers = document.querySelectorAll(".stat-number")
+
+  statNumbers.forEach((stat) => {
+    const target = Number.parseInt(stat.getAttribute("data-count"))
+    let current = 0
+    const duration = 2000 // 2 seconds
+    const increment = target / (duration / 16) // 60fps
+
+    // Set initial value
+    stat.textContent = "0"
+
+    // Create animation
+    const updateCounter = () => {
+      current += increment
+      if (current < target) {
+        stat.textContent = Math.ceil(current)
+        requestAnimationFrame(updateCounter)
+      } else {
+        stat.textContent = target
+      }
+    }
+
+    requestAnimationFrame(updateCounter)
+  })
+}
+
+// Call the direct animation function after a delay
+setTimeout(directCounterAnimation, 1000)
+
+// Also call it on window load
+window.addEventListener("load", directCounterAnimation)
