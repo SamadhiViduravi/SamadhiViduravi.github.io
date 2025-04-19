@@ -198,6 +198,35 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
+  // Fix navigation links
+  const navLinks2 = document.querySelectorAll(".nav-link")
+
+  navLinks2.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault()
+
+      const targetId = this.getAttribute("href")
+      const targetSection = document.querySelector(targetId)
+
+      if (targetSection) {
+        // Use Locomotive Scroll to scroll to the section
+        const scroll = window.locomotiveScroll
+        if (scroll) {
+          scroll.scrollTo(targetSection)
+        } else {
+          // Fallback if Locomotive Scroll is not available
+          targetSection.scrollIntoView({ behavior: "smooth" })
+        }
+
+        // Close mobile menu if open
+        const hamburger = document.querySelector(".hamburger")
+        const navLinks = document.querySelector(".nav-links")
+        hamburger.classList.remove("active")
+        navLinks.classList.remove("active")
+      }
+    })
+  })
+
   // Project filtering
   const filterBtns = document.querySelectorAll(".filter-btn")
   const projectCards = document.querySelectorAll(".project-card")
@@ -289,6 +318,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
+  // Form input animation fix
+  const formInputs2 = document.querySelectorAll(".form-group input, .form-group textarea")
+
+  formInputs2.forEach((input) => {
+    // Check if input has value on page load
+    if (input.value !== "") {
+      input.parentElement.classList.add("focused")
+    }
+
+    // Add focus event
+    input.addEventListener("focus", () => {
+      input.parentElement.classList.add("focused")
+    })
+
+    // Add blur event
+    input.addEventListener("blur", () => {
+      if (input.value === "") {
+        input.parentElement.classList.remove("focused")
+      }
+    })
+  })
+
   // Add CSS for hamburger menu animation
   const style = document.createElement("style")
   style.textContent = `
@@ -373,4 +424,3 @@ document.addEventListener("DOMContentLoaded", () => {
     `
   document.head.appendChild(baseStyle)
 })
-
