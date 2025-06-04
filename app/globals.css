@@ -1,3 +1,5 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css");
+
 /* ===== Base Styles ===== */
 :root {
   --primary-color: #7000ff;
@@ -394,8 +396,6 @@ h6 {
   position: relative;
 }
 
-
-
 .title-container {
   margin-bottom: 1.5rem;
 }
@@ -436,8 +436,6 @@ h6 {
 .image-wrapper:hover {
   transform: perspective(1000px) rotateY(0deg);
 }
-
-
 
 .image-wrapper img {
   width: 100%;
@@ -787,6 +785,7 @@ h6 {
   border-radius: 10px;
   width: 0;
   transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+  box-shadow: 0 0 10px rgba(112, 0, 255, 0.5);
 }
 
 .tech-stack {
@@ -938,9 +937,10 @@ h6 {
 
 .project-info {
   color: var(--text-color);
+  padding: 20px;
 }
 
-.project-title {
+.project-info h3 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
@@ -974,7 +974,23 @@ h6 {
   box-shadow: var(--glow-shadow);
 }
 
-/* Add these styles for the contact section to fix the arrangement */
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.project-tech span {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ===== Contact Section ===== */
 .contact {
   background-color: var(--darker-color);
   position: relative;
@@ -1124,83 +1140,13 @@ h6 {
   color: var(--primary-color);
 }
 
-/* Add responsive styles for contact section */
-@media (max-width: 768px) {
-  .contact-content {
-    grid-template-columns: 1fr;
-  }
-
-  .contact-info {
-    order: 2;
-  }
-
-  .contact-form {
-    order: 1;
-    margin-bottom: 30px;
-  }
-}
-
-/* Add this to your existing styles.css file */
-
-.mute-btn {
-  position: left;
-  background: none;
-  border: none;
-  font-size: 30px;
-  cursor: pointer;
-  color: var(--text-color);
-  margin-left: 15px;
-  transition: transform 0.3s, color 0.3s;
-  z-index: 1001;
-}
-
-.mute-btn:hover {
-  transform: scale(1.1);
-  color: var(--primary-color);
-}
-
-.mute-btn:active {
-  transform: scale(0.95);
-}
-
-/* Add a subtle glow effect to the mute button */
-.mute-btn::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(112, 0, 255, 0.2) 0%, transparent 70%);
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.mute-btn:hover::after {
-  opacity: 1;
-}
-
-/* Responsive adjustments for the mute button */
-@media (max-width: 768px) {
-  .mute-btn {
-    position: absolute;
-    top: 20px;
-    right: 70px;
-    font-size: 20px;
-    
-  }
-}
-
-
+/* ===== Footer ===== */
 .footer {
-  backdrop-filter: blur(10px); /* frosted glass effect */
+  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   padding: 30px 0;
   color: #fff;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .footer .container {
@@ -1232,8 +1178,136 @@ h6 {
 
 /* Optional: Heart pulse animation */
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
+/* ===== Mute Button ===== */
+.mute-btn {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-color);
+  margin-right: 15px;
+  transition: transform 0.3s, color 0.3s;
+  z-index: 1001;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.mute-btn:hover {
+  transform: scale(1.1);
+  color: var(--primary-color);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mute-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===== Mobile Styles ===== */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .nav-links {
+    position: fixed;
+    left: -100%;
+    top: 70px;
+    flex-direction: column;
+    background-color: rgba(5, 5, 5, 0.95);
+    width: 100%;
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    gap: 15px;
+    z-index: 999;
+  }
+
+  .nav-links.active {
+    left: 0;
+  }
+
+  .hero .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info {
+    order: 2;
+  }
+
+  .contact-form {
+    order: 1;
+    margin-bottom: 30px;
+  }
+
+  .mute-btn {
+    position: absolute;
+    top: 20px;
+    right: 70px;
+    font-size: 20px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+}
