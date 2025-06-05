@@ -129,9 +129,7 @@ export default function Contact() {
               <a href="#" target="_blank" rel="noopener noreferrer">
                 <Linkedin size={20} />
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <Twitter size={20} />
-              </a>
+              
               <a href="#" target="_blank" rel="noopener noreferrer">
                 <Instagram size={20} />
               </a>
