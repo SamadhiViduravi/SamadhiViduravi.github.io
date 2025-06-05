@@ -31,10 +31,10 @@ export default function Hero() {
         <div className="hero-content">
           <h1
             className="glitch"
-            data-text="Samadhi Viduravi"
+            data-text="Samadhi Viduravi Dissanayake"
             style={{ opacity: 0, transform: "translateY(50px)", transition: "opacity 1s ease, transform 1s ease" }}
           >
-            Samadhi Viduravi
+            Samadhi Viduravi Dissanayake
           </h1>
           <div
             className="title-container"
@@ -59,6 +59,15 @@ export default function Hero() {
             <a href="#contact" className="btn secondary-btn">
               Get In Touch
             </a>
+            <a
+              href="https://github.com/samadhividuravi?tab=followers"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn github-btn"
+            >
+              <i className="fab fa-github"></i>
+              Follow on GitHub
+            </a>
           </div>
         </div>
         <div
@@ -66,7 +75,13 @@ export default function Hero() {
           style={{ opacity: 0, transform: "translateX(50px)", transition: "opacity 1s ease, transform 1s ease" }}
         >
           <div className="image-wrapper">
-            <Image src="/images/SamadhiViduravi.jpeg" alt="Samadhi Viduravi" width={400} height={500} priority />
+            <Image
+              src="/images/SamadhiViduravi.jpeg"
+              alt="Samadhi Viduravi Dissanayake"
+              width={400}
+              height={500}
+              priority
+            />
             <div className="image-glitch"></div>
           </div>
         </div>

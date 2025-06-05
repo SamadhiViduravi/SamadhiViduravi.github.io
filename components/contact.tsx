@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Mail, MapPin, Phone, Github, Linkedin, Twitter, Instagram } from "lucide-react"
 
@@ -20,6 +19,8 @@ export default function Contact() {
     message: false,
   })
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
@@ -35,12 +36,35 @@ export default function Contact() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Form Submission:", formState)
-    alert("Thank you for your message! I will get back to you soon.")
-    setFormState({ name: "", email: "", subject: "", message: "" })
-    setFocusedFields({ name: false, email: false, subject: false, message: false })
+    setIsSubmitting(true)
+
+    try {
+      
+      const emailjs = await import("@emailjs/browser")
+
+      await emailjs.send(
+        "service_itgex95", 
+        "template_3br40ak", 
+        {
+          from_name: formState.name,
+          from_email: formState.email,
+          subject: formState.subject,
+          message: formState.message,
+        },
+        "1d-81HDGRkfHJOSHG", 
+      )
+
+      alert("Thank you for your message! I will get back to you soon.")
+      setFormState({ name: "", email: "", subject: "", message: "" })
+      setFocusedFields({ name: false, email: false, subject: false, message: false })
+    } catch (error) {
+      console.error("Error sending email:", error)
+      alert("Sorry, there was an error sending your message. Please try again or contact me directly.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -166,8 +190,8 @@ export default function Contact() {
                 ></textarea>
                 <label htmlFor="message">Your Message</label>
               </div>
-              <button type="submit" className="btn primary-btn">
-                <span>Send Message</span>
+              <button type="submit" className="btn primary-btn" disabled={isSubmitting}>
+                <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
                 <i className="fas fa-paper-plane"></i>
               </button>
             </form>
