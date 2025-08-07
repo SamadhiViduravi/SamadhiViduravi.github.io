@@ -99,7 +99,7 @@ export default function About() {
               </div>
             </div>
             <div className="stat-item">
-              <div className="stat-number" data-count="10">
+              <div className="stat-number" data-count="4">
                 0
               </div>
               <div className="stat-text">
