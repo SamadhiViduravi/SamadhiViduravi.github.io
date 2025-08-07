@@ -78,13 +78,13 @@ export default function Navbar() {
         </ul>
 
         <div className="social-icons">
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/samadhividuravi" target="_blank" rel="noopener noreferrer">
             <Github size={16} />
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/in/samadhi-dissanayake-745abb338/" target="_blank" rel="noopener noreferrer">
             <Linkedin size={16} />
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.instagram.com/sl_maari_?igsh=MXNmdW4wMmxqMnd3cw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer">
             <Instagram size={16} />
           </a>
         </div>
