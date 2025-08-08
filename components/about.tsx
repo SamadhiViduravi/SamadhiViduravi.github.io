@@ -109,7 +109,7 @@ export default function About() {
               </div>
             </div>
             <div className="stat-item">
-              <div className="stat-number" data-count="5">
+              <div className="stat-number" data-count="6">
                 0
               </div>
               <div className="stat-text">
